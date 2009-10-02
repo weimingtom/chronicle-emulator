@@ -1,0 +1,30 @@
+﻿<Config>
+  <Database>Server=localhost;Database=chronicle;Username=chronicle;Password=chr0nicle;Pooling=true;Min Pool Size=4;Max Pool Size=32</Database>
+  <Binary>Data.bin</Binary>
+  <Build>75</Build>
+  <Login>
+    <Listener>
+      <Port>8484</Port>
+      <Backlog>16</Backlog>
+    </Listener>
+    <MaxPlayersPerAccount>6</MaxPlayersPerAccount>
+  </Login>
+  <World>
+    <Ribbon>0</Ribbon>
+    <EventMessage />
+    <ExperienceModifier>100</ExperienceModifier>
+    <DropModifier>100</DropModifier>
+    <PendingPlayerLoginDelay>5</PendingPlayerLoginDelay>
+  </World>
+  <Channel>
+    <Listener>
+      <Port>8585</Port>
+      <Backlog>16</Backlog>
+    </Listener>
+    <MaxPopulation>1000</MaxPopulation>
+    <ExternalAddress>192.168.0.2</ExternalAddress>
+  </Channel>
+  <Scripts>
+    <string>Chronicle.Script.Default.dll</string>
+  </Scripts>
+</Config>

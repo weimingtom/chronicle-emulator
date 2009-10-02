@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7DF7DEC0-FEA6-436B-B78A-D50475E92361}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chronicle</RootNamespace>
+    <AssemblyName>Chronicle</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Runtime\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Runtime\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.0.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="Data\AbilityData.cs" />
+    <Compile Include="Enums\EEquipmentSlot.cs" />
+    <Compile Include="Enums\EItemType.cs" />
+    <Compile Include="Enums\EMessageType.cs" />
+    <Compile Include="Game\Account.cs" />
+    <Compile Include="Data\ItemData.cs" />
+    <Compile Include="Data\MapData.cs" />
+    <Compile Include="Data\MobData.cs" />
+    <Compile Include="Data\NPCData.cs" />
+    <Compile Include="Game\IMoveable.cs" />
+    <Compile Include="Game\Map.cs" />
+    <Compile Include="Game\Mob.cs" />
+    <Compile Include="Game\NPC.cs" />
+    <Compile Include="Game\Player.cs" />
+    <Compile Include="Data\QuestData.cs" />
+    <Compile Include="Data\ReactorData.cs" />
+    <Compile Include="Data\SkillData.cs" />
+    <Compile Include="Enums\EBuddyUpdateType.cs" />
+    <Compile Include="Enums\EInventoryType.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Game\PlayerBuddies.cs" />
+    <Compile Include="Game\PlayerBuddy.cs" />
+    <Compile Include="Game\PlayerBuffs.cs" />
+    <Compile Include="Game\PlayerCard.cs" />
+    <Compile Include="Game\PlayerCards.cs" />
+    <Compile Include="Game\PlayerItem.cs" />
+    <Compile Include="Game\PlayerItems.cs" />
+    <Compile Include="Game\PlayerKeymap.cs" />
+    <Compile Include="Game\PlayerMacro.cs" />
+    <Compile Include="Game\PlayerMacros.cs" />
+    <Compile Include="Game\PlayerQuest.cs" />
+    <Compile Include="Game\PlayerQuests.cs" />
+    <Compile Include="Game\PlayerSkill.cs" />
+    <Compile Include="Game\PlayerSkills.cs" />
+    <Compile Include="Game\PlayerTeleport.cs" />
+    <Compile Include="Game\PlayerTeleports.cs" />
+    <Compile Include="Game\Portal.cs" />
+    <Compile Include="Game\Reactor.cs" />
+    <Compile Include="Handlers\LoginHandlers.cs" />
+    <Compile Include="Handlers\MobHandlers.cs" />
+    <Compile Include="Handlers\NPCHandlers.cs" />
+    <Compile Include="Handlers\PlayerHandlers.cs" />
+    <Compile Include="Handlers\PortalHandlers.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Network\Client.cs" />
+    <Compile Include="Game\Coordinates.cs" />
+    <Compile Include="Network\Crypto.cs" />
+    <Compile Include="Network\EOpcode.cs" />
+    <Compile Include="Network\Packet.cs" />
+    <Compile Include="Network\PacketHandlerAttribute.cs" />
+    <Compile Include="Script\PortalScript.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\ByteArraySegment.cs" />
+    <Compile Include="Utility\Database.cs" />
+    <Compile Include="Utility\DatabaseQuery.cs" />
+    <Compile Include="Utility\InitializerAttribute.cs" />
+    <Compile Include="Utility\LockFreeQueue.cs" />
+    <Compile Include="Utility\Doublet.cs" />
+    <Compile Include="Utility\Reflector.cs" />
+    <Compile Include="Utility\Triplet.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

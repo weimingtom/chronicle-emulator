@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronicle", "Chronicle\Chronicle.csproj", "{7DF7DEC0-FEA6-436B-B78A-D50475E92361}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDB2BIN", "MCDB2BIN\MCDB2BIN.csproj", "{613D9D92-FCBD-418E-A4B0-2B7DBD0BAEA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chronicle.Script.Default", "Chronicle.Script.Default\Chronicle.Script.Default.csproj", "{510FA85A-03D3-420C-B9A6-C91CFFC7D443}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DF7DEC0-FEA6-436B-B78A-D50475E92361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DF7DEC0-FEA6-436B-B78A-D50475E92361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DF7DEC0-FEA6-436B-B78A-D50475E92361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DF7DEC0-FEA6-436B-B78A-D50475E92361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{613D9D92-FCBD-418E-A4B0-2B7DBD0BAEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{613D9D92-FCBD-418E-A4B0-2B7DBD0BAEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{613D9D92-FCBD-418E-A4B0-2B7DBD0BAEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{613D9D92-FCBD-418E-A4B0-2B7DBD0BAEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510FA85A-03D3-420C-B9A6-C91CFFC7D443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510FA85A-03D3-420C-B9A6-C91CFFC7D443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510FA85A-03D3-420C-B9A6-C91CFFC7D443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510FA85A-03D3-420C-B9A6-C91CFFC7D443}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
