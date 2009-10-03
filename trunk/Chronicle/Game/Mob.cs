@@ -47,6 +47,7 @@ namespace Chronicle.Game
 
         internal void AssignController(Player pPlayer)
         {
+            if (mController == pPlayer) return;
             if (mController != null) SendControl(false);
             mController = pPlayer;
             SendControl(true);

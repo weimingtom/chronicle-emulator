@@ -37,6 +37,7 @@
         SMSG_MAP_FORCE_EQUIPMENT        = 0x0079,
         SMSG_MAP_EFFECT                 = 0x007E,
         SMSG_PLAYER_DETAILS             = 0x0091,
+        SMSG_PLAYER_LEAVE               = 0x0092,
         SMSG_PLAYER_CHAT                = 0x0093,
         SMSG_PLAYER_MOVE                = 0x00A7,
         SMSG_PLAYER_EMOTE               = 0x00AF,
@@ -52,6 +53,7 @@
         SMSG_KEYMAP                     = 0x012A,
 
         CMSG_PLAYER_LOAD                = 0x0014,
+        CMSG_PLAYER_TELEPORT            = 0x0025,
         CMSG_PLAYER_MOVE                = 0x0028,
         //CMSG_PLAYER_ATTACK_MELEE        = 0x002B,
         //CMSG_PLAYER_DAMAGE              = 0x002F,

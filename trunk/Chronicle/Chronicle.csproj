@@ -91,6 +91,7 @@
     <Compile Include="Network\EOpcode.cs" />
     <Compile Include="Network\Packet.cs" />
     <Compile Include="Network\PacketHandlerAttribute.cs" />
+    <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="Script\PortalScript.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
