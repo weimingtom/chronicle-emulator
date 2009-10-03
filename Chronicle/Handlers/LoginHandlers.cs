@@ -443,7 +443,6 @@ namespace Chronicle.Handlers
         [PacketHandler(EOpcode.CMSG_DISCONNECT)]
         public static void Disconnect(Client pClient, Packet pPacket)
         {
-            pPacket.Dump();
             if (pClient.Account == null) pClient.Disconnect();
         }
     }

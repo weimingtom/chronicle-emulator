@@ -44,6 +44,61 @@ namespace Chronicle.Handlers
             pClient.Account.Player.EnterMap();
         }
 
+        [PacketHandler(EOpcode.CMSG_PLAYER_TELEPORT)]
+        public static void Teleport(Client pClient, Packet pPacket)
+        {
+            int mapIdentifier;
+            if (!pPacket.ReadSkip(1) ||
+                !pPacket.ReadInt(out mapIdentifier))
+            {
+                pClient.Disconnect();
+                return;
+            }
+            if (mapIdentifier == -1)
+            {
+                string portalName;
+                if (!pPacket.ReadString(out portalName))
+                {
+                    pClient.Disconnect();
+                    return;
+                }
+                Portal portal = pClient.Account.Player.Map.GetPortal(portalName);
+                if (portal == null)
+                {
+                    Log.WriteLine(ELogLevel.Debug, "[{0}] Portal Blocked {1}", pClient.Host, portalName);
+                    pClient.Account.Player.SendPortalBlocked();
+                    return;
+                }
+                Map mapDestination = Server.GetActiveMap(portal.Data.ToMapIdentifier);
+                if (mapDestination == null)
+                {
+                    Log.WriteLine(ELogLevel.Debug, "[{0}] Portal Blocked {1}", pClient.Host, portalName);
+                    pClient.Account.Player.SendPortalBlocked();
+                    return;
+                }
+                Portal portalDestination = mapDestination.GetPortal(portal.Data.ToName);
+                if (portalDestination == null)
+                {
+                    Log.WriteLine(ELogLevel.Debug, "[{0}] Portal Blocked {1}", pClient.Host, portalName);
+                    pClient.Account.Player.SendPortalBlocked();
+                    return;
+                }
+
+                Log.WriteLine(ELogLevel.Info, "[{0}] Portal Triggered {1}", pClient.Host, portal.Data.Name);
+                pClient.Account.Player.Map.RemovePlayer(pClient.Account.Player);
+                pClient.Account.Player.Map = mapDestination;
+                pClient.Account.Player.Map.AddPlayer(pClient.Account.Player);
+                pClient.Account.Player.Spawn = portalDestination.Index;
+                pClient.Account.Player.Position.X = portalDestination.Data.X;
+                pClient.Account.Player.Position.Y = portalDestination.Data.Y;
+                pClient.Account.Player.Stance = 0;
+                pClient.Account.Player.Foothold = 0;
+                pClient.Account.Player.FallCount = 0;
+                pClient.Account.Player.SendMapChange();
+                pClient.Account.Player.EnterMap();
+            }
+        }
+
         [PacketHandler(EOpcode.CMSG_PLAYER_MOVE)]
         public static void Move(Client pClient, Packet pPacket)
         {
@@ -66,6 +121,8 @@ namespace Chronicle.Handlers
             {
             }
             else pClient.Account.Player.FallCount = 0;
+
+            pClient.Account.Player.Map.UpdateMobControllers(true);
         }
 
         [PacketHandler(EOpcode.CMSG_PLAYER_CHAT)]

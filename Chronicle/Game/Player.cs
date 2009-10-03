@@ -225,6 +225,19 @@ namespace Chronicle.Game
             mClient.SendPacket(packet);
         }
 
+        internal void SendMapChange()
+        {
+            Packet packet = new Packet(EOpcode.SMSG_MAP_CHANGE);
+            packet.WriteInt(0);
+            packet.WriteInt(2);
+            packet.WriteInt(mMap.Data.Identifier);
+            packet.WriteByte(mSpawn);
+            packet.WriteUShort(mHealth);
+            packet.WriteByte(0x00);
+            packet.WriteLong(DateTime.Now.Ticks);
+            mClient.SendPacket(packet);
+        }
+
         internal void SendKeymap()
         {
             Packet packet = new Packet(EOpcode.SMSG_KEYMAP);
@@ -378,6 +391,7 @@ namespace Chronicle.Game
 
         internal void EnterMap()
         {
+            Log.WriteLine(ELogLevel.Info, "[{0}] Entered Map {1}", mClient.Host, mMap.Data.Identifier);
             if (mMap.Data.Music.Length > 0)
             {
                 Packet packet = new Packet(EOpcode.SMSG_MAP_EFFECT);
@@ -391,6 +405,7 @@ namespace Chronicle.Game
             mMap.SendNPCDetails(this);
             mMap.SendReactorDetails(this);
             mMap.SendMobDetails(this);
+            mMap.UpdateMobControllers(false);
         }
 
         public void SendMessage(EMessageType pType, string pMessage, params object[] pArgs)

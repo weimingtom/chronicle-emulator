@@ -12,6 +12,7 @@ namespace Chronicle.Game
         private MapData mData = null;
         private List<Player> mPlayers = new List<Player>();
         private DateTime mLastPulse = DateTime.MinValue;
+        private DateTime mLastMobControllersUpdate = DateTime.MinValue;
 
         private List<Portal> mPortals = new List<Portal>();
         private List<NPC> mNPCs = new List<NPC>();
@@ -21,7 +22,8 @@ namespace Chronicle.Game
         internal Map(MapData pData)
         {
             mData = pData;
-            mData.Portals.ForEach(p => mPortals.Add(new Portal(p, Server.GetPortalScript(p.Name))));
+            byte index = 0;
+            mData.Portals.ForEach(p => mPortals.Add(new Portal(p, index++, Server.GetPortalScript(p.Name))));
             mData.NPCs.ForEach(n => mNPCs.Add(new NPC(n)));
             mData.Reactors.ForEach(r => mReactors.Add(new Reactor(r)));
             mData.Mobs.ForEach(m => mMobs.Add(new Mob(m)));
@@ -36,6 +38,7 @@ namespace Chronicle.Game
             Player controller = null;
             if (mPlayers.Count > 0) controller = mPlayers[0];
             mMobs.ForEach(m => { if (m.Controller == pPlayer) m.AssignController(controller); });
+            SendPlayerLeave(pPlayer);
         }
 
         internal void SendPacketToAllExcept(Packet pPacket, Player pExcept) { mPlayers.ForEach(p => { if (p != pExcept) p.SendPacket(pPacket); }); }
@@ -45,6 +48,13 @@ namespace Chronicle.Game
         {
             SendPacketToAllExcept(pPlayer.GetPlayerDetails(), pPlayer);
             mPlayers.ForEach(p => { if (p != pPlayer) pPlayer.SendPacket(p.GetPlayerDetails()); });
+        }
+
+        internal void SendPlayerLeave(Player pPlayer)
+        {
+            Packet packet = new Packet(EOpcode.SMSG_PLAYER_LEAVE);
+            packet.WriteInt(pPlayer.Identifier);
+            SendPacketToAll(packet);
         }
 
         internal Portal GetPortal(string pName) { return mPortals.Find(p => p.Data.Name == pName); }
@@ -106,7 +116,7 @@ namespace Chronicle.Game
             {
                 Packet packet = new Packet(EOpcode.SMSG_MOB_DETAILS);
                 packet.WriteInt(mob.UniqueIdentifier);
-                packet.WriteByte(0); //packet.WriteByte((byte)mob.Control);
+                packet.WriteByte(0x00);
                 packet.WriteInt(mob.Data.MobIdentifier);
                 mob.WriteStatus(packet);
                 packet.WriteCoordinates(mob.Position);
@@ -120,8 +130,28 @@ namespace Chronicle.Game
                 packet.WriteInt(0);
                 pPlayer.SendPacket(packet);
 
-                if (mob.Controller == null) mob.AssignController(pPlayer);
             }
+        }
+
+        internal void UpdateMobControllers(bool pFromMovement)
+        {
+            if (pFromMovement && DateTime.Now.Subtract(mLastMobControllersUpdate) < TimeSpan.FromSeconds(3)) return;
+            foreach (Mob mob in mMobs)
+            {
+                Player controller = null;
+                int closest = int.MaxValue;
+                foreach (Player player in mPlayers)
+                {
+                    int distance = mob.Position - player.Position;
+                    if (distance <= 700 && distance < closest && mMobs.Count(m => m.Controller == player) < 22)
+                    {
+                        controller = player;
+                        distance = closest;
+                    }
+                }
+                mob.AssignController(controller);
+            }
+            mLastMobControllersUpdate = DateTime.Now;
         }
 
         internal bool ReadMovement(IMoveable pMoveable, Packet pPacket)
