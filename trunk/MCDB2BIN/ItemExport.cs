@@ -19,6 +19,8 @@ namespace MCDB2BIN
             {
                 connection1.Open();
                 MySqlCommand command1 = connection1.CreateCommand();
+                command1.CommandText = "SELECT COUNT(*) FROM item_data";
+                Program.ResetCounter((int)(long)command1.ExecuteScalar());
                 command1.CommandText = "SELECT * FROM item_data ORDER BY itemid ASC";
                 using (MySqlDataReader reader1 = command1.ExecuteReader())
                 {
@@ -34,6 +36,8 @@ namespace MCDB2BIN
                         data.MaxLevel = (byte)Convert.ChangeType(reader1["max_level"], TypeCode.Byte);
                         data.Experience = (int)Convert.ChangeType(reader1["exp"], TypeCode.Int32);
                         data.MakerLevel = (byte)Convert.ChangeType(reader1["level_for_maker"], TypeCode.Byte);
+                        data.Money = (int)Convert.ChangeType(reader1["money"], TypeCode.Int32);
+                        data.StateChangeItem = (int)Convert.ChangeType(reader1["state_change_item"], TypeCode.Int32);
                         data.NPC = (int)Convert.ChangeType(reader1["npc"], TypeCode.Int32);
                         using (MySqlConnection connection2 = new MySqlConnection(Program.Database))
                         {
@@ -171,6 +175,7 @@ namespace MCDB2BIN
                                     data.Consume.DecreaseHunger = (byte)Convert.ChangeType(reader2["decrease_hunger"], TypeCode.Byte);
                                     data.Consume.DecreaseFatigue = (byte)Convert.ChangeType(reader2["decrease_fatigue"], TypeCode.Byte);
                                     data.Consume.CarnivalPoints = (byte)Convert.ChangeType(reader2["carnival_points"], TypeCode.Byte);
+                                    data.Consume.CreateItem = (int)Convert.ChangeType(reader2["create_item"], TypeCode.Int32);
                                     data.Consume.Probability = (byte)Convert.ChangeType(reader2["prob"], TypeCode.Byte);
                                     data.Consume.Time = (ushort)Convert.ChangeType(reader2["time"], TypeCode.UInt16);
                                     data.Consume.WeaponAttack = (short)Convert.ChangeType(reader2["weapon_attack"], TypeCode.Int16);
@@ -316,6 +321,18 @@ namespace MCDB2BIN
                                     data.Scroll.Avoidance = (byte)Convert.ChangeType(reader2["iavo"], TypeCode.Byte);
                                     data.Scroll.Speed = (byte)Convert.ChangeType(reader2["ispeed"], TypeCode.Byte);
                                     data.Scroll.Jump = (byte)Convert.ChangeType(reader2["ijump"], TypeCode.Byte);
+                                    data.Scroll.Targets = new List<int>();
+                                    using (MySqlConnection connection3 = new MySqlConnection(Program.Database))
+                                    {
+                                        connection3.Open();
+                                        MySqlCommand command3 = connection3.CreateCommand();
+                                        command3.CommandText = "SELECT * FROM item_scroll_targets WHERE scrollid=@scrollid ORDER BY id ASC";
+                                        command3.Parameters.AddWithValue("@scrollid", data.Identifier);
+                                        using (MySqlDataReader reader3 = command3.ExecuteReader())
+                                        {
+                                            while (reader3.Read()) data.Scroll.Targets.Add((int)Convert.ChangeType(reader3["req_itemid"], TypeCode.Int32));
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -381,6 +398,7 @@ namespace MCDB2BIN
                         datas.Add(data);
                         ++dataCount;
                         ++Program.AllDataCounter;
+                        Program.IncrementCounter();
                     }
                 }
             }

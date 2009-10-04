@@ -13,7 +13,7 @@ namespace Chronicle.Data
         public static ushort ReduceCardIdentifier(int pCardIdentifier) { return (ushort)(pCardIdentifier % 10000); }
 
         [Flags]
-        public enum EItemFlags : byte
+        public enum EItemFlags : ushort
         {
             None = 0 << 0,
             Time_Limited = 1 << 0,
@@ -30,17 +30,35 @@ namespace Chronicle.Data
             BlockPickup = 1 << 5,
             Quest = 1 << 6,
             Cash_Item = 1 << 7,
-            Cash = 1 << 7
+            Cash = 1 << 7,
+            Party_Quest = 1 << 8,
+            PartyQuest = 1 << 8
         }
 
         public sealed class ItemEquipmentData
         {
             [Flags]
-            public enum EItemEquipmentFlags : byte
+            public enum EItemEquipmentFlags : ushort
             {
                 None = 0 << 0,
                 Wear_Trade_Block = 1 << 0,
-                WearTradeBlock = 1 << 0
+                WearTradeBlock = 1 << 0,
+                Pet_Big_Loot_Range = 1 << 1,
+                PetBigLootRange = 1 << 1,
+                Pet_Auto_HP = 1 << 2,
+                PetAutoHP = 1 << 2,
+                Pet_Auto_MP = 1 << 3,
+                PetAutoMP = 1 << 3,
+                Pet_Sweep_For_Drops = 1 << 4,
+                PetSweepForDrops = 1 << 4,
+                Pet_Loot_Money = 1 << 5,
+                PetLootMoney = 1 << 5,
+                Pet_Loot_Items = 1 << 6,
+                PetLootItems = 1 << 6,
+                Pet_Loot_Others = 1 << 7,
+                PetLootOthers = 1 << 7,
+                Pet_Loot_Ignore = 1 << 8,
+                PetLootIgnore = 1 << 8
             }
 
             [Flags]
@@ -313,7 +331,7 @@ namespace Chronicle.Data
 
             public void Save(BinaryWriter pWriter)
             {
-                pWriter.Write((byte)Flags);
+                pWriter.Write((ushort)Flags);
                 pWriter.Write((ulong)Slots);
                 pWriter.Write(AttackSpeed);
                 pWriter.Write(HealHP);
@@ -356,7 +374,7 @@ namespace Chronicle.Data
 
             public void Load(BinaryReader pReader)
             {
-                Flags = (EItemEquipmentFlags)pReader.ReadByte();
+                Flags = (EItemEquipmentFlags)pReader.ReadUInt16();
                 Slots = (EItemEquipmentSlots)pReader.ReadUInt64();
                 AttackSpeed = pReader.ReadByte();
                 HealHP = pReader.ReadByte();
@@ -473,6 +491,7 @@ namespace Chronicle.Data
             public byte DecreaseHunger { get; set; }
             public byte DecreaseFatigue { get; set; }
             public byte CarnivalPoints { get; set; }
+            public int CreateItem { get; set; }
             public byte Probability { get; set; }
             public ushort Time { get; set; }
             public short WeaponAttack { get; set; }
@@ -510,6 +529,7 @@ namespace Chronicle.Data
                 pWriter.Write(DecreaseHunger);
                 pWriter.Write(DecreaseFatigue);
                 pWriter.Write(CarnivalPoints);
+                pWriter.Write(CreateItem);
                 pWriter.Write(Probability);
                 pWriter.Write(Time);
                 pWriter.Write(WeaponAttack);
@@ -548,6 +568,7 @@ namespace Chronicle.Data
                 DecreaseHunger = pReader.ReadByte();
                 DecreaseFatigue = pReader.ReadByte();
                 CarnivalPoints = pReader.ReadByte();
+                CreateItem = pReader.ReadInt32();
                 Probability = pReader.ReadByte();
                 Time = pReader.ReadUInt16();
                 WeaponAttack = pReader.ReadInt16();
@@ -750,6 +771,7 @@ namespace Chronicle.Data
             public byte Avoidance { get; set; }
             public byte Speed { get; set; }
             public byte Jump { get; set; }
+            public List<int> Targets { get; set; }
 
             public void Save(BinaryWriter pWriter)
             {
@@ -770,6 +792,9 @@ namespace Chronicle.Data
                 pWriter.Write(Avoidance);
                 pWriter.Write(Speed);
                 pWriter.Write(Jump);
+
+                pWriter.Write(Targets.Count);
+                foreach (int itemIdentifier in Targets) pWriter.Write(itemIdentifier);
             }
 
             public void Load(BinaryReader pReader)
@@ -791,6 +816,10 @@ namespace Chronicle.Data
                 Avoidance = pReader.ReadByte();
                 Speed = pReader.ReadByte();
                 Jump = pReader.ReadByte();
+
+                int targetCount = pReader.ReadInt32();
+                Targets = new List<int>(targetCount);
+                while (targetCount-- > 0) Targets.Add(pReader.ReadInt32());
             }
         }
 
@@ -861,6 +890,8 @@ namespace Chronicle.Data
         public byte MaxLevel { get; set; }
         public int Experience { get; set; }
         public byte MakerLevel { get; set; }
+        public int Money { get; set; }
+        public int StateChangeItem { get; set; }
         public int NPC { get; set; }
         public ItemEquipmentData Equipment { get; set; }
         public ItemConsumeData Consume { get; set; }
@@ -875,7 +906,7 @@ namespace Chronicle.Data
         public void Save(BinaryWriter pWriter)
         {
             pWriter.Write(Identifier);
-            pWriter.Write((byte)Flags);
+            pWriter.Write((ushort)Flags);
             pWriter.Write(Price);
             pWriter.Write(MaxSlotQuantity);
             pWriter.Write(MaxPossessionCount);
@@ -883,6 +914,8 @@ namespace Chronicle.Data
             pWriter.Write(MaxLevel);
             pWriter.Write(Experience);
             pWriter.Write(MakerLevel);
+            pWriter.Write(Money);
+            pWriter.Write(StateChangeItem);
             pWriter.Write(NPC);
             pWriter.Write(Equipment != null);
             if (Equipment != null) Equipment.Save(pWriter);
@@ -907,7 +940,7 @@ namespace Chronicle.Data
         public void Load(BinaryReader pReader)
         {
             Identifier = pReader.ReadInt32();
-            Flags = (EItemFlags)pReader.ReadByte();
+            Flags = (EItemFlags)pReader.ReadUInt16();
             Price = pReader.ReadInt32();
             MaxSlotQuantity = pReader.ReadUInt16();
             MaxPossessionCount = pReader.ReadByte();
@@ -915,6 +948,8 @@ namespace Chronicle.Data
             MaxLevel = pReader.ReadByte();
             Experience = pReader.ReadInt32();
             MakerLevel = pReader.ReadByte();
+            Money = pReader.ReadInt32();
+            StateChangeItem = pReader.ReadInt32();
             NPC = pReader.ReadInt32();
             if (pReader.ReadBoolean())
             {

@@ -21,16 +21,16 @@ namespace Chronicle.Handlers
                 pClient.Disconnect();
                 return;
             }
-            Portal portal = pClient.Account.Player.Map.GetPortal(name);
+            Portal portal = pClient.Player.Map.GetPortal(name);
             if (portal == null || portal.Script == null)
             {
                 Log.WriteLine(ELogLevel.Debug, "[{0}] Portal Script Blocked {1}", pClient.Host, name);
-                pClient.Account.Player.SendPortalBlocked();
+                pClient.Player.SendPortalBlocked();
                 return;
             }
 
             Log.WriteLine(ELogLevel.Info, "[{0}] Portal Script Triggered {1}", pClient.Host, portal.Script.GetType().FullName);
-            portal.Script.Execute(pClient.Account.Player, portal);
+            portal.Script.Execute(pClient.Player, portal);
         }
     }
 }

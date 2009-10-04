@@ -19,6 +19,8 @@ namespace MCDB2BIN
             {
                 connection1.Open();
                 MySqlCommand command1 = connection1.CreateCommand();
+                command1.CommandText = "SELECT COUNT(*) FROM skill_mob_data";
+                Program.ResetCounter((int)(long)command1.ExecuteScalar());
                 command1.CommandText = "SELECT * FROM skill_mob_data ORDER BY skillid ASC,level ASC";
                 using (MySqlDataReader reader1 = command1.ExecuteReader())
                 {
@@ -48,7 +50,7 @@ namespace MCDB2BIN
                             {
                                 connection2.Open();
                                 MySqlCommand command2 = connection2.CreateCommand();
-                                command2.CommandText = "SELECT * FROM skill_mob_summons WHERE level=@level ORDER BY mob_index ASC";
+                                command2.CommandText = "SELECT * FROM skill_mob_summons WHERE level=@level ORDER BY `index` ASC";
                                 command2.Parameters.AddWithValue("@level", data.Level);
                                 using (MySqlDataReader reader2 = command2.ExecuteReader())
                                 {
@@ -63,6 +65,7 @@ namespace MCDB2BIN
                         datas.Add(data);
                         ++dataCount;
                         ++Program.AllDataCounter;
+                        Program.IncrementCounter();
                     }
                 }
             }

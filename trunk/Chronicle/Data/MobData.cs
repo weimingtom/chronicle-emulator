@@ -155,12 +155,6 @@ namespace Chronicle.Data
         public byte HPBarColor { get; set; }
         public byte HPBarBackgroundColor { get; set; }
         public byte CarnivalPoints { get; set; }
-        public EMobMagicModifier IceModifier { get; set; }
-        public EMobMagicModifier FireModifier { get; set; }
-        public EMobMagicModifier PoisonModifier { get; set; }
-        public EMobMagicModifier LightningModifier { get; set; }
-        public EMobMagicModifier HolyModifier { get; set; }
-        public EMobMagicModifier NonElementalModifier { get; set; }
         public ushort PhysicalAttack { get; set; }
         public ushort PhysicalDefense { get; set; }
         public ushort MagicalAttack { get; set; }
@@ -169,6 +163,12 @@ namespace Chronicle.Data
         public ushort Avoidance { get; set; }
         public short Speed { get; set; }
         public short ChaseSpeed { get; set; }
+        public EMobMagicModifier IceModifier { get; set; }
+        public EMobMagicModifier FireModifier { get; set; }
+        public EMobMagicModifier PoisonModifier { get; set; }
+        public EMobMagicModifier LightningModifier { get; set; }
+        public EMobMagicModifier HolyModifier { get; set; }
+        public EMobMagicModifier NonElementalModifier { get; set; }
         public List<MobAbilityData> Abilities { get; set; }
         public List<MobAttackData> Attacks { get; set; }
         public List<int> Summons { get; set; }
@@ -197,12 +197,6 @@ namespace Chronicle.Data
             pWriter.Write(HPBarColor);
             pWriter.Write(HPBarBackgroundColor);
             pWriter.Write(CarnivalPoints);
-            pWriter.Write((byte)IceModifier);
-            pWriter.Write((byte)FireModifier);
-            pWriter.Write((byte)PoisonModifier);
-            pWriter.Write((byte)LightningModifier);
-            pWriter.Write((byte)HolyModifier);
-            pWriter.Write((byte)NonElementalModifier);
             pWriter.Write(PhysicalAttack);
             pWriter.Write(PhysicalDefense);
             pWriter.Write(MagicalAttack);
@@ -211,6 +205,12 @@ namespace Chronicle.Data
             pWriter.Write(Avoidance);
             pWriter.Write(Speed);
             pWriter.Write(ChaseSpeed);
+            pWriter.Write((byte)IceModifier);
+            pWriter.Write((byte)FireModifier);
+            pWriter.Write((byte)PoisonModifier);
+            pWriter.Write((byte)LightningModifier);
+            pWriter.Write((byte)HolyModifier);
+            pWriter.Write((byte)NonElementalModifier);
 
             pWriter.Write(Abilities.Count);
             Abilities.ForEach(a => a.Save(pWriter));
@@ -248,12 +248,6 @@ namespace Chronicle.Data
             HPBarColor = pReader.ReadByte();
             HPBarBackgroundColor = pReader.ReadByte();
             CarnivalPoints = pReader.ReadByte();
-            IceModifier = (EMobMagicModifier)pReader.ReadByte();
-            FireModifier = (EMobMagicModifier)pReader.ReadByte();
-            PoisonModifier = (EMobMagicModifier)pReader.ReadByte();
-            LightningModifier = (EMobMagicModifier)pReader.ReadByte();
-            HolyModifier = (EMobMagicModifier)pReader.ReadByte();
-            NonElementalModifier = (EMobMagicModifier)pReader.ReadByte();
             PhysicalAttack = pReader.ReadUInt16();
             PhysicalDefense = pReader.ReadUInt16();
             MagicalAttack = pReader.ReadUInt16();
@@ -262,6 +256,12 @@ namespace Chronicle.Data
             Avoidance = pReader.ReadUInt16();
             Speed = pReader.ReadInt16();
             ChaseSpeed = pReader.ReadInt16();
+            IceModifier = (EMobMagicModifier)pReader.ReadByte();
+            FireModifier = (EMobMagicModifier)pReader.ReadByte();
+            PoisonModifier = (EMobMagicModifier)pReader.ReadByte();
+            LightningModifier = (EMobMagicModifier)pReader.ReadByte();
+            HolyModifier = (EMobMagicModifier)pReader.ReadByte();
+            NonElementalModifier = (EMobMagicModifier)pReader.ReadByte();
 
             int abilitiesCount = pReader.ReadInt32();
             Abilities = new List<MobAbilityData>(abilitiesCount);
