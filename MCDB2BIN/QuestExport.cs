@@ -19,6 +19,8 @@ namespace MCDB2BIN
             {
                 connection1.Open();
                 MySqlCommand command1 = connection1.CreateCommand();
+                command1.CommandText = "SELECT COUNT(*) FROM quest_data";
+                Program.ResetCounter((int)(long)command1.ExecuteScalar());
                 command1.CommandText = "SELECT * FROM quest_data ORDER BY questid ASC";
                 using (MySqlDataReader reader1 = command1.ExecuteReader())
                 {
@@ -27,8 +29,11 @@ namespace MCDB2BIN
                         QuestData data = new QuestData();
                         data.Identifier = (ushort)Convert.ChangeType(reader1["questid"], TypeCode.UInt16);
                         data.NextIdentifier = (ushort)Convert.ChangeType(reader1["next_quest"], TypeCode.UInt16);
+                        data.Area = (byte)Convert.ChangeType(reader1["quest_area"], TypeCode.Byte);
                         data.MinLevel = (byte)Convert.ChangeType(reader1["min_level"], TypeCode.Byte);
                         data.MaxLevel = (byte)Convert.ChangeType(reader1["max_level"], TypeCode.Byte);
+                        data.PetCloseness = (ushort)Convert.ChangeType(reader1["pet_closeness"], TypeCode.UInt16);
+                        data.TamingMobLevel = (byte)Convert.ChangeType(reader1["taming_mob_level"], TypeCode.Byte);
                         data.RepeatWait = (int)Convert.ChangeType(reader1["repeat_wait"], TypeCode.Int32);
                         data.Fame = (ushort)Convert.ChangeType(reader1["fame"], TypeCode.UInt16);
                         data.Jobs = new List<ushort>();
@@ -60,7 +65,7 @@ namespace MCDB2BIN
                                     QuestData.QuestRequirementData requirementData = new QuestData.QuestRequirementData();
                                     requirementData.State = (QuestData.QuestRequirementData.EQuestRequirementState)Enum.Parse(typeof(QuestData.QuestRequirementData.EQuestRequirementState), (string)Convert.ChangeType(reader2["quest_state"], TypeCode.String), true);
                                     requirementData.Type = (QuestData.QuestRequirementData.EQuestRequirementType)Enum.Parse(typeof(QuestData.QuestRequirementData.EQuestRequirementType), (string)Convert.ChangeType(reader2["request_type"], TypeCode.String), true);
-                                    requirementData.Parameter1 = (int)Convert.ChangeType(reader2["object_id"], TypeCode.Int32);
+                                    requirementData.Parameter1 = (int)Convert.ChangeType(reader2["objectid"], TypeCode.Int32);
                                     requirementData.Parameter2 = (int)Convert.ChangeType(reader2["count"], TypeCode.Int32);
 
                                     data.Requirements.Add(requirementData);
@@ -82,7 +87,7 @@ namespace MCDB2BIN
                                     if ((string)Convert.ChangeType(reader2["flags"], TypeCode.String) != "") rewardData.Flags = (QuestData.QuestRewardData.EQuestRewardFlags)Enum.Parse(typeof(QuestData.QuestRewardData.EQuestRewardFlags), (string)Convert.ChangeType(reader2["flags"], TypeCode.String), true);
                                     rewardData.State = (QuestData.QuestRewardData.EQuestRewardState)Enum.Parse(typeof(QuestData.QuestRewardData.EQuestRewardState), (string)Convert.ChangeType(reader2["quest_state"], TypeCode.String), true);
                                     rewardData.Type = (QuestData.QuestRewardData.EQuestRewardType)Enum.Parse(typeof(QuestData.QuestRewardData.EQuestRewardType), (string)Convert.ChangeType(reader2["reward_type"], TypeCode.String), true);
-                                    rewardData.Parameter1 = (int)Convert.ChangeType(reader2["reward_id"], TypeCode.Int32);
+                                    rewardData.Parameter1 = (int)Convert.ChangeType(reader2["rewardid"], TypeCode.Int32);
                                     rewardData.Parameter2 = (int)Convert.ChangeType(reader2["count"], TypeCode.Int32);
                                     rewardData.MasterLevel = (byte)Convert.ChangeType(reader2["master_level"], TypeCode.Byte);
                                     rewardData.Gender = (QuestData.QuestRewardData.EQuestRewardGender)Enum.Parse(typeof(QuestData.QuestRewardData.EQuestRewardGender), (string)Convert.ChangeType(reader2["gender"], TypeCode.String), true);
@@ -98,6 +103,7 @@ namespace MCDB2BIN
                         datas.Add(data);
                         ++dataCount;
                         ++Program.AllDataCounter;
+                        Program.IncrementCounter();
                     }
                 }
             }

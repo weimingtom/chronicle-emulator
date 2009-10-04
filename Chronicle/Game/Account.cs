@@ -5,18 +5,22 @@ namespace Chronicle.Game
 {
     public sealed class Account
     {
+        private int mIdentifier;
+        private string mUsername;
+        private string mPassword;
+        private byte mLevel;
+
         internal Account(DatabaseQuery pQuery)
         {
-            Identifier = (int)pQuery["identifier"];
-            Username = (string)pQuery["username"];
-            Password = (string)pQuery["password"];
-            Level = (byte)pQuery["level"];
+            mIdentifier = (int)pQuery["identifier"];
+            mUsername = (string)pQuery["username"];
+            mPassword = (string)pQuery["password"];
+            mLevel = (byte)pQuery["level"];
         }
 
-        public int Identifier { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-        public byte Level { get; private set; }
-        public Player Player { get; internal set; }
+        public int Identifier { get { return mIdentifier; } }
+        public string Username { get { return mUsername; } }
+        public string Password { get { return mPassword; } }
+        public byte Level { get { return mLevel; } }
     }
 }

@@ -19,6 +19,8 @@ namespace MCDB2BIN
             {
                 connection1.Open();
                 MySqlCommand command1 = connection1.CreateCommand();
+                command1.CommandText = "SELECT COUNT(*) FROM mob_data";
+                Program.ResetCounter((int)(long)command1.ExecuteScalar());
                 command1.CommandText = "SELECT * FROM mob_data ORDER BY mobid ASC";
                 using (MySqlDataReader reader1 = command1.ExecuteReader())
                 {
@@ -46,12 +48,6 @@ namespace MCDB2BIN
                         data.HPBarColor = (byte)Convert.ChangeType(reader1["hp_bar_color"], TypeCode.Byte);
                         data.HPBarBackgroundColor = (byte)Convert.ChangeType(reader1["hp_bar_bg_color"], TypeCode.Byte);
                         data.CarnivalPoints = (byte)Convert.ChangeType(reader1["carnival_points"], TypeCode.Byte);
-                        data.IceModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["ice_modifier"], TypeCode.String), true);
-                        data.FireModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["fire_modifier"], TypeCode.String), true);
-                        data.PoisonModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["poison_modifier"], TypeCode.String), true);
-                        data.LightningModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["lightning_modifier"], TypeCode.String), true);
-                        data.HolyModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["holy_modifier"], TypeCode.String), true);
-                        data.NonElementalModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["nonelemental_modifier"], TypeCode.String), true);
                         data.PhysicalAttack = (ushort)Convert.ChangeType(reader1["physical_attack"], TypeCode.UInt16);
                         data.PhysicalDefense = (ushort)Convert.ChangeType(reader1["physical_defense"], TypeCode.UInt16);
                         data.MagicalAttack = (ushort)Convert.ChangeType(reader1["magical_attack"], TypeCode.UInt16);
@@ -60,6 +56,12 @@ namespace MCDB2BIN
                         data.Avoidance = (ushort)Convert.ChangeType(reader1["avoidability"], TypeCode.UInt16);
                         data.Speed = (short)Convert.ChangeType(reader1["speed"], TypeCode.Int16);
                         data.ChaseSpeed = (short)Convert.ChangeType(reader1["chase_speed"], TypeCode.Int16);
+                        data.IceModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["ice_modifier"], TypeCode.String), true);
+                        data.FireModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["fire_modifier"], TypeCode.String), true);
+                        data.PoisonModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["poison_modifier"], TypeCode.String), true);
+                        data.LightningModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["lightning_modifier"], TypeCode.String), true);
+                        data.HolyModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["holy_modifier"], TypeCode.String), true);
+                        data.NonElementalModifier = (MobData.EMobMagicModifier)Enum.Parse(typeof(MobData.EMobMagicModifier), (string)Convert.ChangeType(reader1["nonelemental_modifier"], TypeCode.String), true);
                         data.Abilities = new List<MobData.MobAbilityData>();
                         using (MySqlConnection connection2 = new MySqlConnection(Program.Database))
                         {
@@ -144,6 +146,7 @@ namespace MCDB2BIN
                         datas.Add(data);
                         ++dataCount;
                         ++Program.AllDataCounter;
+                        Program.IncrementCounter();
                     }
                 }
             }

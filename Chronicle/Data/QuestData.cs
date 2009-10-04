@@ -68,7 +68,11 @@ namespace Chronicle.Data
                 Mesos = 3,
                 Fame = 4,
                 Skill = 5,
-                Buff = 6
+                Buff = 6,
+                Pet_Closeness = 7,
+                PetCloseness = 7,
+                Pet_Speed = 8,
+                PetSpeed = 8
             }
 
             public enum EQuestRewardGender : byte
@@ -146,8 +150,11 @@ namespace Chronicle.Data
         
         public ushort Identifier { get; set; }
         public ushort NextIdentifier { get; set; }
+        public byte Area { get; set; }
         public byte MinLevel { get; set; }
         public byte MaxLevel { get; set; }
+        public ushort PetCloseness { get; set; }
+        public byte TamingMobLevel { get; set; }
         public int RepeatWait { get; set; }
         public ushort Fame { get; set; }
         public List<ushort> Jobs { get; set; }
@@ -158,8 +165,11 @@ namespace Chronicle.Data
         {
             pWriter.Write(Identifier);
             pWriter.Write(NextIdentifier);
+            pWriter.Write(Area);
             pWriter.Write(MinLevel);
             pWriter.Write(MaxLevel);
+            pWriter.Write(PetCloseness);
+            pWriter.Write(TamingMobLevel);
             pWriter.Write(RepeatWait);
             pWriter.Write(Fame);
 
@@ -177,8 +187,11 @@ namespace Chronicle.Data
         {
             Identifier = pReader.ReadUInt16();
             NextIdentifier = pReader.ReadUInt16();
+            Area = pReader.ReadByte();
             MinLevel = pReader.ReadByte();
             MaxLevel = pReader.ReadByte();
+            PetCloseness = pReader.ReadUInt16();
+            TamingMobLevel = pReader.ReadByte();
             RepeatWait = pReader.ReadInt32();
             Fame = pReader.ReadUInt16();
 

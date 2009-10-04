@@ -40,6 +40,7 @@ namespace Chronicle.Network
         private ushort mReceivingPacketLength = 0;
 
         private Account mAccount = null;
+        private Player mPlayer = null;
 
         public Client(Socket pSocket)
         {
@@ -52,6 +53,7 @@ namespace Chronicle.Network
 
         public string Host { get { return mHost; } }
         public Account Account { get { return mAccount; } internal set { mAccount = value; } }
+        public Player Player { get { return mPlayer; } internal set { mPlayer = value; } }
 
         public void Disconnect()
         {
@@ -60,10 +62,10 @@ namespace Chronicle.Network
                 mSocket.Shutdown(SocketShutdown.Both);
                 mSocket.Close();
                 Log.WriteLine(ELogLevel.Debug, "[{0}] Disconnected", Host);
-                if (mAccount != null && mAccount.Player != null)
+                if (mAccount != null && mPlayer != null)
                 {
                     // Save Player
-                    mAccount.Player.Map.RemovePlayer(mAccount.Player);
+                    mPlayer.Map.RemovePlayer(mPlayer);
                 }
                 Server.ClientDisconnected(this);
             }

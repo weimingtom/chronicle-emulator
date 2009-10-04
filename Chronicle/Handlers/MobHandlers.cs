@@ -30,12 +30,12 @@ namespace Chronicle.Handlers
                 pClient.Disconnect();
                 return;
             }
-            Mob mob = pClient.Account.Player.Map.GetMob(uniqueIdentifier);
-            if (mob == null || mob.Controller != pClient.Account.Player) return;
+            Mob mob = pClient.Player.Map.GetMob(uniqueIdentifier);
+            if (mob == null || mob.Controller != pClient.Player) return;
             int rewindOffset = pPacket.Cursor;
             Coordinates unknownPosition;
             if (!pPacket.ReadCoordinates(out unknownPosition) ||
-                !pClient.Account.Player.Map.ReadMovement(mob, pPacket))
+                !pClient.Player.Map.ReadMovement(mob, pPacket))
             {
                 pClient.Disconnect();
                 return;
@@ -58,7 +58,9 @@ namespace Chronicle.Handlers
             packet.WriteByte(usingAbility);
             packet.WriteCoordinates(projectileTarget);
             packet.WriteBytes(pPacket.InnerBuffer, pPacket.Cursor, pPacket.Remaining);
-            pClient.Account.Player.Map.SendPacketToAllExcept(packet, pClient.Account.Player);
+            pClient.Player.Map.SendPacketToAllExcept(packet, pClient.Player);
+
+            pClient.Player.Map.UpdateMobControllers(true);
         }
     }
 }

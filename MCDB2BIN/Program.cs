@@ -6,8 +6,11 @@ namespace MCDB2BIN
 {
     internal static class Program
     {
-        public static readonly string Database = "Server=localhost;Database=mcdb4;Username=chronicle;Password=chr0nicle;Pooling=true;Min Pool Size=16;Max Pool Size=32";
+        public static readonly string Database = "Server=localhost;Database=mcdb;Username=chronicle;Password=chr0nicle;Pooling=true;Min Pool Size=4;Max Pool Size=16";
         public static long AllDataCounter = 0;
+        public static int TotalCount = 0;
+        public static int CurrentCount = 0;
+        public static int CurrentPercent = 0;
 
         private static void Main()
         {
@@ -37,6 +40,25 @@ namespace MCDB2BIN
             Console.WriteLine();
             Console.Write("Press Any Key To Exit");
             Console.ReadKey(true);
+        }
+
+        public static void ResetCounter(int pTotalCount)
+        {
+            CurrentPercent = 0;
+            CurrentCount = 0;
+            TotalCount = pTotalCount;
+            Console.Title = "Progress: 0%";
+        }
+
+        public static void IncrementCounter()
+        {
+            ++CurrentCount;
+            int percent = (CurrentCount * 100) / TotalCount;
+            if (percent > CurrentPercent)
+            {
+                CurrentPercent = percent;
+                Console.Title = "Progress: " + CurrentPercent + "%";
+            }
         }
     }
 }
